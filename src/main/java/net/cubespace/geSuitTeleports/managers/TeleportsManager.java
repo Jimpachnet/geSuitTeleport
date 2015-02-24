@@ -102,39 +102,7 @@ public class TeleportsManager {
     }
 
     public static void finishTPA( final Player player, final String target ) {
-        if (!player.hasPermission("gesuit.teleports.bypass.delay")) {
-            lastLocation.put(player, player.getLocation());
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6Teleportation will commence in &c3 seconds&6. Don't move."));
-
-            geSuitTeleports.getInstance().getServer().getScheduler().runTaskLater(geSuitTeleports.getInstance(), new Runnable() {
-                @Override
-                public void run() {
-                	Location loc = lastLocation.get(player);
-                	lastLocation.remove(player);
-                	if (player.isOnline()) {
-                        if ((loc != null) && (loc.getBlock().equals(player.getLocation().getBlock()))) {
-	                        player.sendMessage(ChatColor.GOLD + "Teleportation commencing...");
-	                        player.saveData();
-	                        ByteArrayOutputStream b = new ByteArrayOutputStream();
-	                        DataOutputStream out = new DataOutputStream(b);
-	                        try {
-	                            out.writeUTF("TeleportToPlayer");
-	                            out.writeUTF(player.getName());
-	                            out.writeUTF(player.getName());
-	                            out.writeUTF(target);
-	                            out.writeBoolean(false);
-	                            out.writeBoolean(true);
-	                        } catch (IOException e) {
-	                            e.printStackTrace();
-	                        }
-	                        new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
-	                    } else {
-	                        player.sendMessage(ChatColor.RED + "Teleportation aborted because you moved.");
-	                    }
-                	}
-                }
-            }, 60L);
-        } else {
+        
             player.saveData();
             ByteArrayOutputStream b = new ByteArrayOutputStream();
             DataOutputStream out = new DataOutputStream(b);
@@ -150,7 +118,6 @@ public class TeleportsManager {
             }
             new PluginMessageTask(b).runTaskAsynchronously(geSuitTeleports.instance);
         }
-    }
     
     public static void doLeaveServer( Player p ) {
         if (p == null) {
